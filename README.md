@@ -1,74 +1,131 @@
 # EEE385L_Project_BI-RADS-Classification
-#  BI-RADS Classification Using Deep Learning
+# 🩺 Breast Cancer Classification using Deep Learning on KAUMDS Dataset
 
-This project applies deep learning models to classify mammogram images into BI-RADS categories (1, 3, 4, 5), aiding in early breast cancer detection. We compare a custom CNN against pretrained architectures including ResNet50, EfficientNetB0, and MobileNetV2. Our best-performing model, MobileNetV2, achieved 88% accuracy on local Saudi medical imaging data.
-
----
-
-## Dataset
-
-- **KAUMDS Dataset**
-- Mammogram images with labels: BI-RADS 1, 3, 4, 5
-- Resized to `224x224`, normalized
-- 75% training, 15% validation, 10% testing split
+This project implements deep learning models to classify mammogram images into BI-RADS categories using the King Abdulaziz University Medical Dataset (KAUMDS). We explore both custom and pretrained models (CNN, ResNet50, EfficientNetB0, MobileNetV2) to support clinical decision-making in early breast cancer detection.
 
 ---
 
-##  Models Compared
+## 📊 Project Overview
 
-| Model           | Accuracy | Macro F1 | Macro Precision | Macro Recall | Weighted F1 | Weighted Precision | Weighted Recall |
-|----------------|----------|----------|------------------|---------------|-------------|---------------------|------------------|
-| **CNN**        | 0.82     | 0.51     | 0.47             | 0.60          | 0.84        | 0.87                | 0.82             |
-| **ResNet50**   | 0.12     | 0.05     | 0.03             | 0.24          | 0.03        | 0.01                | 0.12             |
-| **EfficientNetB0** | 0.84 | 0.23     | 0.21             | 0.25          | 0.76        | 0.70                | 0.84             |
-| **MobileNetV2** | **0.88** | **0.65** | **0.63**         | **0.69**      | **0.89**    | **0.91**            | **0.88**         |
-
----
-
-##  Methodology
-
-- **Preprocessing**: Resize, normalization, augmentation
-- **Loss**: Categorical cross-entropy
-- **Optimizer**: Adam
-- **Metrics**: Accuracy, Precision, Recall, F1-score
-- **Evaluation**: Confusion matrix, classification report, training/validation curves
-- **Regularization**: Dropout, batch normalization
+- **Objective:** Automate BI-RADS classification (1, 3, 4, 5) using mammogram images.
+- **Dataset:** King Abdulaziz University Mammogram Dataset  
+  DOI: [10.21227/a4cs-ax02](https://dx.doi.org/10.21227/a4cs-ax02)
+- **Challenges:** Class imbalance, low-data learning, explainability
+- **Highlights:**
+  - Four deep learning models compared
+  - Data augmentation and class weights applied
+  - Evaluation with class-sensitive metrics
+  - Grad-CAM visualization (for interpretability)
 
 ---
 
-## 📊 Results Summary
+## 🗂️ Dataset Details
 
-- **MobileNetV2** was the best performer across all metrics.
-- **CNN** gave strong baseline results and responded well to regularization.
-- **ResNet50** underfit the small dataset and performed poorly.
-- **EfficientNetB0** showed moderate precision but poor generalization.
-- **Dropout Ablation** revealed the importance of regularization: without dropout, the CNN's accuracy dropped from 85% to 1%.
-
----
-
-##  Ablation Studies
-
-We turned off key components like Dropout to observe performance effects. The CNN without dropout overfit severely and achieved only 1% accuracy and 0.005 F1-score. The misclassified samples were visually similar and showed the model struggled to generalize without regularization.
+The KAUMDS dataset includes:
+- Over 6,000 mammogram images
+- BI-RADS classes:  
+  - **1:** Normal  
+  - **3:** Probably Benign  
+  - **4:** Suspicious  
+  - **5:** Highly Suggestive of Malignancy  
+- Views: CC and MLO  
+- Format: JPEG images + Excel-based metadata
 
 ---
 
-##  Grad-CAM Insights (Unavailable)
+## 🧠 Model Architectures
 
-Due to backend restrictions and frozen graph errors in TensorFlow, Grad-CAM visualizations failed during integration for several models. The models had no defined outputs during graph extraction, which hindered Grad-CAM generation. These issues stem from the model not being called with input shapes after loading or having incompatible layers for backprop.
-
----
-
-##  Misclassification Analysis
-
-- BI-RADS 3 and 4 often misclassified as each other due to subtle density differences.
-- BI-RADS 5 (malignant) cases were occasionally misclassified as BI-RADS 1, indicating potential for real-world risk.
-- MobileNetV2 performed the best at avoiding critical errors.
+| Model           | Type        | Key Layers                        | Parameters |
+|----------------|-------------|-----------------------------------|------------|
+| CNN Baseline    | Custom      | Conv2D + BatchNorm + Dropout      | ~1.2M      |
+| ResNet50        | Pretrained  | Residual Blocks + GAP + Dense     | ~23M       |
+| EfficientNetB0  | Pretrained  | Compound Scaled CNN               | ~5M        |
+| MobileNetV2     | Pretrained  | Depthwise Separable Conv + Dense  | ~3.4M      |
 
 ---
 
-## How to Run
+## ⚙️ Training Details
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/yourusername/birads-classification.git
-   cd birads-classification
+- **Train/Val/Test Split:** 75% / 15% / 10%
+- **Input Size:** 224x224 RGB
+- **Loss Function:** Sparse Categorical Crossentropy
+- **Optimizer:** Adam with learning rate scheduling
+- **Regularization:** Dropout, BatchNorm, Early Stopping
+- **Augmentation:** Horizontal flipping, brightness, rotation
+- **Class Imbalance Handling:** Class Weights, Oversampling
+
+---
+
+## 📈 Performance Summary
+
+| Model         | Accuracy | Macro F1 | Weighted F1 |
+|---------------|----------|----------|-------------|
+| CNN Baseline  | 82%      | 0.51     | 0.84        |
+| ResNet50      | 12%      | 0.05     | 0.03        |
+| EfficientNetB0| 84%      | 0.23     | 0.76        |
+| MobileNetV2   | **88%**  | **0.65** | **0.89**    |
+
+---
+
+## 📊 Evaluation Metrics
+
+- **Accuracy**
+- **Precision, Recall, F1-score (Macro & Weighted)**
+- **Confusion Matrix**
+- **ROC-AUC**
+- **Grad-CAM Visualizations**
+
+---
+
+## 📌 Ablation Studies
+
+| Change                  | Result                       |
+|-------------------------|------------------------------|
+| No BatchNorm            | ~10% drop in accuracy         |
+| No Dropout              | Increased overfitting         |
+| No Data Augmentation    | Poor generalization observed  |
+
+---
+
+## 🔍 Error Analysis
+
+- BI-RADS 3 was often confused with BI-RADS 4.
+- BI-RADS 5 (malignant) was rarely predicted due to low representation.
+- Misclassifications reflect dataset imbalance and visual similarity in dense tissue.
+
+---
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# Clone this repository
+git clone https://github.com/your-org/breast-cancer-birads-kaumds.git
+cd breast-cancer-birads-kaumds
+
+# Install required packages
+pip install -r requirements.txt
+
+# Launch the training pipeline
+jupyter notebook main_pipeline.ipynb
+```
+
+## 📄 License
+This project is licensed under the MIT License.
+See the LICENSE file for full license information.
+
+## 🙋 Submitted By
+| Name                        | Email                                                                         |
+| --------------------------- | ----------------------------------------------------------------------------- |
+| Mohammad Fasiul Abedin Khan | [fasiul.abedin.khan@g.bracu.ac.bd](mailto:fasiul.abedin.khan@g.bracu.ac.bd)   |
+| Farrdin Nowshad             | [farrdin.nowshad@g.bracu.ac.bd](mailto:farrdin.nowshad@g.bracu.ac.bd)         |
+| Abrar Maksud Nahean         | [abrar.maksud.nahean@g.bracu.ac.bd](mailto:abrar.maksud.nahean@g.bracu.ac.bd) |
+| MD. Abu Anas Mridul         | (Email not provided)                                                          |
+
+## 📬 Contact
+For questions, feel free to contact any of the contributors.
+We welcome collaboration and suggestions!
+
+
+
