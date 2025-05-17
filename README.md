@@ -4,6 +4,14 @@
 This project implements deep learning models to classify mammogram images into BI-RADS categories using the King Abdulaziz University Medical Dataset (KAUMDS). We explore both custom and pretrained models (CNN, ResNet50, EfficientNetB0, MobileNetV2) to support clinical decision-making in early breast cancer detection.
 
 ---
+## 🙋 Author 
+| Name                        | Email                                                                         |
+| --------------------------- | ----------------------------------------------------------------------------- |
+| Mohammad Fasiul Abedin Khan | [fasiul.abedin.khan@g.bracu.ac.bd](mailto:fasiul.abedin.khan@g.bracu.ac.bd)   |
+| Farrdin Nowshad             | [farrdin.nowshad@g.bracu.ac.bd](mailto:farrdin.nowshad@g.bracu.ac.bd)         |
+| Abrar Maksud Nahean         | [abrar.maksud.nahean@g.bracu.ac.bd](mailto:abrar.maksud.nahean@g.bracu.ac.bd) |
+| MD. Abu Anas Mridul         | (Email not provided)                                                          |
+
 
 ## 📊 Project Overview
 
@@ -115,13 +123,7 @@ jupyter notebook main_pipeline.ipynb
 This project is licensed under the MIT License.
 See the LICENSE file for full license information.
 
-## 🙋 Submitted By
-| Name                        | Email                                                                         |
-| --------------------------- | ----------------------------------------------------------------------------- |
-| Mohammad Fasiul Abedin Khan | [fasiul.abedin.khan@g.bracu.ac.bd](mailto:fasiul.abedin.khan@g.bracu.ac.bd)   |
-| Farrdin Nowshad             | [farrdin.nowshad@g.bracu.ac.bd](mailto:farrdin.nowshad@g.bracu.ac.bd)         |
-| Abrar Maksud Nahean         | [abrar.maksud.nahean@g.bracu.ac.bd](mailto:abrar.maksud.nahean@g.bracu.ac.bd) |
-| MD. Abu Anas Mridul         | (Email not provided)                                                          |
+
 
 ## 📬 Contact
 For questions, feel free to contact any of the contributors.
